@@ -6,6 +6,7 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const loginValidation = require("../middlewares/loginValidation");
 const jwt = require("jsonwebtoken");
+const authMiddleware = require("../middlewares/authMiddleware");
 
 router.get("/", (req, res) => {
     res.send("User router");
@@ -51,7 +52,12 @@ router.post("/login", loginValidation, async (req, res) => {
                     username: exsitingUser.username,
                     email: exsitingUser.email
                 }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
-                res.cookie("token", token);
+                res.cookie("token", token, {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: "lax",
+                    maxAge: 24 * 60 * 60 * 1000
+                });
                 return res.status(200).json({ message: "User Login Successfull", success: true, token: token, logedInUser: exsitingUser });
             } else {
                 return res.status(500).json({ message: "Wrong Password", success: false });
@@ -63,8 +69,21 @@ router.post("/login", loginValidation, async (req, res) => {
 })
 
 router.get("/logout", (req, res) => {
+    const token = req.cookies?.token; // optional chaining prevents crash
+    if (!token) {
+        return res.status(400).json({ message: "No token found", success: false });
+    }
+
     res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "strict" });
-    return res.status(200).json({ message: "User logged out successfull", success: true });
+    return res.status(200).json({ message: "User logged out successfully", success: true, token });
+})
+
+router.get("/check-auth", authMiddleware, async (req, res) => {
+    return res.json({
+        success: true,
+        message: "User is authenticated",
+        user: req.user
+    });
 })
 
 module.exports = router;

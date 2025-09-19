@@ -5,18 +5,30 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        min:3,
-        max:15
+        min: 3,
+        max: 15
     },
-    email:{
-        type:String,
+    email: {
+        type: String,
         required: true,
         unique: true,
     },
-    password:{
-        type:String,
-        required:true
-    }
+    password: {
+        type: String,
+        required: true
+    },
+    productsbrought: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "product"
+        }
+    ],
+    listedProduct: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "product"
+        }
+    ]
 });
 
 module.exports = mongoose.model("user", userSchema);

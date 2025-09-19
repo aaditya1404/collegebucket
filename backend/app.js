@@ -1,16 +1,24 @@
 const express = require("express");
 const app = express();
 
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+const cors = require("cors");
 let dotenv = require("dotenv").config();
 const connectToDB = require("./database/dbConnect");
 connectToDB();
 
-const userRouter = require("./router/userRouter");
-const cookieParser = require("cookie-parser");
-
 app.use(express.json());
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true
+}));
+
+const userRouter = require("./router/userRouter");
+const productRouter = require("./router/productRouter");
+
 app.use("/user", userRouter);
-app.use(cookieParser());
+app.use("/product", productRouter);
 
 app.get("/", (req, res) => {
     res.send("Main backend route");
