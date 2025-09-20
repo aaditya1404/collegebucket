@@ -5,16 +5,17 @@ import { AuthContext } from '../context/AuthContext'
 const Navbar = () => {
 
   const { user, setUser } = useContext(AuthContext);
-  
+
   const navigate = useNavigate();
 
   async function handleLogout() {
+    navigate("/");
     await fetch("http://localhost:8000/user/logout", {
-      method: "POST",
+      method: "GET",
       credentials: "include"
     });
-    navigate("/");
     setUser(null);
+    localStorage.removeItem("user");
   }
 
   return (
@@ -29,7 +30,10 @@ const Navbar = () => {
         </div>
         {
           user ? (
-            <button onClick={handleLogout}>Logout</button>
+            <div className='flex gap-4'>
+              <button onClick={handleLogout} className='bg-black text-white px-8 py-2 font-semibold rounded-full'>Logout</button>
+              <Link to={"/profile"} className='bg-black text-white px-8 py-2 font-semibold rounded-full'>Profile</Link>
+            </div>
           ) : (
             <Link to={"/login"} className='bg-black text-white px-8 py-2 font-semibold rounded-full'>Login</Link>
           )

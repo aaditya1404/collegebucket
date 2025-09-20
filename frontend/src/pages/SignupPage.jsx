@@ -27,7 +27,6 @@ const SignupPage = () => {
             if(data.success == true){
                 navigate("/login");
             }
-            console.log(data);
         } catch (error) {
             console.log(error);
         }
@@ -40,7 +39,7 @@ const SignupPage = () => {
 
     return (
         <div className=' flex h-screen overflow-hidden w-full'>
-            <div className='bg-blue-400 w-1/2 '>
+            <div className='w-1/2 '>
                 <img src="/images/signupimage.jpg" alt="sign up image" className='w-full h-full object-cover' />
             </div>
             <div className='w-1/2 flex items-center justify-center '>

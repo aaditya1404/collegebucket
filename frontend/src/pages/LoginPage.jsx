@@ -26,9 +26,9 @@ const LoginPage = () => {
       alert(data.message);
       if (data.success == true) {
         setUser(data.logedInUser);
+        localStorage.setItem("user", JSON.stringify(data.logedInUser));
         navigate("/profile");
       }
-      console.log(data);
     } catch (error) {
       console.log(error);
     }

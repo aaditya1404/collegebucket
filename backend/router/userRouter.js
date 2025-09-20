@@ -49,6 +49,7 @@ router.post("/login", loginValidation, async (req, res) => {
         bcrypt.compare(password, exsitingUser.password, (err, result) => {
             if (result) {
                 let token = jwt.sign({
+                    _id: exsitingUser._id,
                     username: exsitingUser.username,
                     email: exsitingUser.email
                 }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
@@ -58,7 +59,12 @@ router.post("/login", loginValidation, async (req, res) => {
                     sameSite: "lax",
                     maxAge: 24 * 60 * 60 * 1000
                 });
-                return res.status(200).json({ message: "User Login Successfull", success: true, token: token, logedInUser: exsitingUser });
+                const user = {
+                    _id: exsitingUser._id,
+                    username: exsitingUser.username,
+                    email: exsitingUser.email
+                }
+                return res.status(200).json({ message: "User Login Successfull", success: true, token: token, logedInUser: user });
             } else {
                 return res.status(500).json({ message: "Wrong Password", success: false });
             }
@@ -69,13 +75,13 @@ router.post("/login", loginValidation, async (req, res) => {
 })
 
 router.get("/logout", (req, res) => {
-    const token = req.cookies?.token; // optional chaining prevents crash
+    const token = req.cookies?.token;
     if (!token) {
         return res.status(400).json({ message: "No token found", success: false });
     }
 
     res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "strict" });
-    return res.status(200).json({ message: "User logged out successfully", success: true, token });
+    return res.status(200).json({ message: "User logged out successfully", success: true});
 })
 
 router.get("/check-auth", authMiddleware, async (req, res) => {

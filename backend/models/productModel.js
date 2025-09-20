@@ -12,6 +12,10 @@ const productSchema = mongoose.Schema({
     productprice: {
         type: String,
         required: true
+    },
+    listedByUserId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"user"
     }
 })
 

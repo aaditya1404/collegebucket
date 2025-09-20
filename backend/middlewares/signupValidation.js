@@ -1,11 +1,14 @@
 function signupValidation(req, res, next) {
     try {
         let { username, email, password } = req.body;
-        if (!username) {
+        if (!username && !email && !password) {
+            return res.status(500).json({ message: "All the fields are required", success: false });
+        }
+        else if (!username) {
             return res.status(500).json({ message: "Username is required", success: false });
         } else if (!email) {
             return res.status(500).json({ message: "Email is required", success: false });
-        } else if(!password) {
+        } else if (!password) {
             return res.status(500).json({ message: "Password is required", success: false });
         }
         next();

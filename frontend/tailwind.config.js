@@ -10,6 +10,9 @@ module.exports = {
         syncopate: ["Syncopate", "sans-serif"]
       },
     },
+    plugins: [
+      require('@tailwindcss/line-clamp'),
+    ],
   },
   plugins: [],
 }
