@@ -13,6 +13,9 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    productImageurl:{
+        type:String
+    },
     listedByUserId:{
         type: mongoose.Schema.Types.ObjectId,
         ref:"user"

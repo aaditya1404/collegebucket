@@ -19,7 +19,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className='w-full flex items-center justify-center p-8 fixed'>
+    <div className='w-full flex items-center justify-center p-8  fixed'>
       <div className='flex items-center justify-around bg-white w-[98%] rounded-2xl py-4'>
         <div>
           <Link to={"/"} className='text-2xl tracking-tighter font-bold font-poppins'>College Bucket</Link>

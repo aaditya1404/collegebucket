@@ -7,6 +7,7 @@ const SellPage = () => {
   const [productname, setProductname] = useState("");
   const [productdesc, setProductdesc] = useState("");
   const [productprice, setProductprice] = useState("");
+  const [img, setImg] = useState();
   const [userProduct, setUserProduct] = useState([]);
   const [logedInUser, setLogedInUser] = useState(() => {
     const userString = localStorage.getItem("user")
@@ -14,7 +15,7 @@ const SellPage = () => {
   });
 
   useEffect(() => {
-    if (!logedInUser?._id) return; 
+    if (!logedInUser?._id) return;
     fetch(`http://localhost:8000/product/${logedInUser?._id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Not able to fetch product");
@@ -27,30 +28,48 @@ const SellPage = () => {
   }, []);
 
   async function addProduct() {
-    let res = await fetch("http://localhost:8000/product/add", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify({
-        productname,
-        productdesc,
-        productprice,
-        listedByUserId: logedInUser?._id
+    if (!img) {
+      alert("Image is required");
+      return;
+    }
+    try {
+      const formData = new FormData();
+      formData.append("file", img);
+      formData.append("upload_preset", "productimageupload");
+      const response = await fetch(`https://api.cloudinary.com/v1_1/dpa4je7qw/upload`, {
+        method: "POST",
+        body: formData,
       })
-    });
-    const data = await res.json();
-    alert(data.message);
+      const imageUpload = await response.json();
+      console.log(imageUpload.secure_url);
+      let res = await fetch("http://localhost:8000/product/add", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({
+          productname,
+          productdesc,
+          productprice,
+          productImageurl: imageUpload.secure_url,
+          listedByUserId: logedInUser?._id
+        })
+      });
+      const data = await res.json();
+      alert(data.message);
+    } catch (error) {
+      console.log("Error adding the product", error);
+    }
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     addProduct();
   }
 
 
   return (
-    <div className=' flex items-center justify-center h-[calc(100vh-200px)] overflow-hidden w-full'>
+    <div className=' flex items-center justify-center h-screen w-full pt-34'>
       {
         logedInUser ? (
           <>
@@ -89,6 +108,12 @@ const SellPage = () => {
                     placeholder='Price'
                     name='productprice'
                     onChange={(e) => setProductprice(e.target.value)}
+                  />
+                  <input
+                    className='block w-full px-2 py-2 outline-none rounded-md mb-4 bg-[#FFF1EB]'
+                    type="file"
+                    name='productImage'
+                    onChange={(e) => setImg(e.target.files[0])}
                   />
                   <button
                     type='submit'

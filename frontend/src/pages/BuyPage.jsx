@@ -19,8 +19,8 @@ const BuyPage = () => {
 
 
   return (
-    <div className='w-full flex justify-center p-8'>
-      <div className='w-[98%] grid grid-cols-3 gap-6'>
+    <div className='w-full flex justify-center p-4 pt-20 sm:pt-28 lg:pt-32'>
+      <div className='w-[96%] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
         {
           allproduct?.map((product)=>(
             <ProductCard key={product._id} product={product}/>

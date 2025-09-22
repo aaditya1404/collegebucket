@@ -9,12 +9,14 @@ router.get("/", (req, res) => {
 })
 
 router.post("/add", addProductValidation, async (req, res) => {
-    let { productname, productdesc, productprice, listedByUserId } = req.body;
+    let { productname, productdesc, productprice, productImageurl, listedByUserId } = req.body;
+    console.log(productImageurl);
     try {
         let createdProduct = await productModel.create({
             productname,
             productdesc,
             productprice,
+            productImageurl,
             listedByUserId
         });
         await userModel.findByIdAndUpdate(
