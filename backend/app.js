@@ -10,8 +10,8 @@ connectToDB();
 
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true
+    origin: ["http://localhost:3000", "https://collegebucket-backend.onrender.com"],
+    credentials: true,
 }));
 
 const userRouter = require("./router/userRouter");
