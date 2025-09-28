@@ -11,7 +11,8 @@ const SignupPage = () => {
     async function createUser(){
         try {
             
-            const res = await fetch("http://localhost:8000/user/signup", {
+            // const res = await fetch("http://localhost:8000/user/signup", {
+            const res = await fetch("https://collegebucket-backend.onrender.com/user/signup", {
                 method:"POST",
                 headers: {
                     "content-type": "application/json"

@@ -6,7 +6,8 @@ const BuyPage = () => {
   const [allproduct, setAllproduct] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/product/allproduct")
+    // fetch("http://localhost:8000/product/allproduct") // local host url
+    fetch("https://collegebucket-backend.onrender.com/product/allproduct")
       .then((res) => {
         if (!res.ok) throw new Error("Not able to fetch product");
         return res.json();

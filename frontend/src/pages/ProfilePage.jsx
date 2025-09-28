@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../context/AuthContext';
-import ProductCard from '../Components/ProductCard';
 import { Link } from 'react-router-dom';
 
 const ProfilePage = () => {
@@ -23,7 +22,8 @@ const ProfilePage = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/user/${user?._id}`)
+    // fetch(`http://localhost:8000/user/${user?._id}`)
+    fetch(`https://collegebucket-backend.onrender.com/user/${user?._id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Not able to fetch user");
         return res.json();
@@ -32,10 +32,11 @@ const ProfilePage = () => {
         setUserInfo(data.userInfo);
       })
       .catch((err) => console.error("Error fetching:", err));
-  }, []);
+  }, [user?._id]);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/product/${user?._id}`)
+    // fetch(`http://localhost:8000/product/${user?._id}`)
+    fetch(`https://collegebucket-backend.onrender.com/product/${user?._id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Not able to fetch user");
         return res.json();
@@ -48,7 +49,8 @@ const ProfilePage = () => {
 
   async function addUserProfileInfo(userId) {
     try {
-      let res = await fetch(`http://localhost:8000/user/adduserprofile`, {
+      // let res = await fetch(`http://localhost:8000/user/adduserprofile`, {
+      let res = await fetch(`https://collegebucket-backend.onrender.com/user/adduserprofile`, {
         method: "POST",
         headers: {
           "content-type": "application/json"

@@ -7,7 +7,8 @@ const Product = () => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    fetch(`http://localhost:8000/product/details/${id}`)
+    // fetch(`http://localhost:8000/product/details/${id}`) 
+    fetch(`https://collegebucket-backend.onrender.com/product/details/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Not able to fetch product");
         return res.json();
@@ -23,7 +24,8 @@ const Product = () => {
 
   useEffect(() => {
     if (!productInfo?.listedByUserId) return;
-    fetch(`http://localhost:8000/user/${productInfo?.listedByUserId}`)
+    // fetch(`http://localhost:8000/user/${productInfo?.listedByUserId}`)
+    fetch(`https://collegebucket-backend.onrender.com/user/${productInfo?.listedByUserId}`)
       .then((res) => {
         if (!res.ok) throw new Error("Not able to get user");
         return res.json();

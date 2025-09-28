@@ -12,7 +12,8 @@ const Navbar = () => {
 
   async function handleLogout() {
     navigate("/");
-    await fetch("http://localhost:8000/user/logout", {
+    // await fetch("http://localhost:8000/user/logout", {
+    await fetch("https://collegebucket-backend.onrender.com/user/logout", {
       method: "GET",
       credentials: "include"
     });

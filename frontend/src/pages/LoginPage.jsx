@@ -11,7 +11,8 @@ const LoginPage = () => {
 
   async function userLogin() {
     try {
-      const res = await fetch("http://localhost:8000/user/login", {
+      // const res = await fetch("http://localhost:8000/user/login", { // localhost url
+      const res = await fetch("https://collegebucket-backend.onrender.com/user/login", {
         method: "POST",
         headers: {
           "content-type": "application/json"

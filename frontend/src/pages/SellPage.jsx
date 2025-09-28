@@ -26,7 +26,8 @@ const SellPage = () => {
         body: formData,
       })
       const imageUpload = await response.json();
-      let res = await fetch("http://localhost:8000/product/add", {
+      // let res = await fetch("http://localhost:8000/product/add", {
+      let res = await fetch("https://collegebucket-backend.onrender.com/product/add", {
         method: "POST",
         headers: {
           "content-type": "application/json"
