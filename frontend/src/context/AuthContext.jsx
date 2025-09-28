@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // fetch("http://localhost:8000/user/check-auth", { // localhost url
+    
     fetch("https://collegebucket-backend.onrender.com/user/check-auth", {
       credentials: "include",
     })
