@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const loginValidation = require("../middlewares/loginValidation");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/authMiddleware");
+const userIdValidation = require("../middlewares/userIdValidation");
 
 router.get("/", (req, res) => {
     res.send("User router");
@@ -81,7 +82,7 @@ router.get("/logout", (req, res) => {
     }
 
     res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "strict" });
-    return res.status(200).json({ message: "User logged out successfully", success: true});
+    return res.status(200).json({ message: "User logged out successfully", success: true });
 })
 
 router.get("/check-auth", authMiddleware, async (req, res) => {
@@ -90,6 +91,47 @@ router.get("/check-auth", authMiddleware, async (req, res) => {
         message: "User is authenticated",
         user: req.user
     });
+})
+
+router.get("/:id", userIdValidation, async (req, res) => {
+    const userId = req.params.id;
+    if (typeof userId === undefined) {
+        return res.json({ message: "User Id is required", success: false });
+    }
+    try {
+        const response = await userModel.findOne({ _id: userId });
+        if (!response) {
+            return res.status(500).json({ message: "Unable to fetch user info", success: false });
+        }
+        return res.status(200).json({ message: "Fetched user details successfully", success: true, userInfo: response });
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+router.post("/adduserprofile", async (req, res) => {
+    let { userId, department, semester, contact, about } = req.body;
+    if (!userId) {
+        return res.status(500).json({ message: "User Id not found", success: false });
+    }
+    try {
+        const updatedUser = await userModel.findByIdAndUpdate(
+            { _id: userId },
+            {
+                department,
+                semester,
+                contact,
+                about
+            },
+            { new: true }
+        );
+        if (!updatedUser) {
+            return res.status(500).json({ message: "Error updating user profile", success: false });
+        }
+        return res.status(200).json({ message: "User profile updated", success: true, updatedUser: updatedUser });
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 module.exports = router;

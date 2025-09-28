@@ -17,6 +17,18 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    department: {
+        type: String,
+    },
+    semester: {
+        type: String
+    },
+    contact: {
+        type: String
+    },
+    about: {
+        type: String
+    },
     productsbrought: [
         {
             type: mongoose.Schema.Types.ObjectId,

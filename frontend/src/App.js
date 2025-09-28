@@ -7,6 +7,7 @@ import BuyPage from "./pages/BuyPage";
 import SellPage from "./pages/SellPage";
 import ProfilePage from "./pages/ProfilePage";
 import { AuthProvider } from "./context/AuthContext";
+import Product from "./pages/Product";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/buy" element={<BuyPage />} />
           <Route path="/sell" element={<SellPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="buy/product/:id" element={<Product />} />
         </Routes>
       </AuthProvider>
     </div>

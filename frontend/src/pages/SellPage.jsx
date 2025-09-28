@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import ProductCard from '../Components/ProductCard';
+import { useState } from 'react'
 import { Link } from 'react-router-dom';
 
 const SellPage = () => {
@@ -8,24 +7,10 @@ const SellPage = () => {
   const [productdesc, setProductdesc] = useState("");
   const [productprice, setProductprice] = useState("");
   const [img, setImg] = useState();
-  const [userProduct, setUserProduct] = useState([]);
   const [logedInUser, setLogedInUser] = useState(() => {
     const userString = localStorage.getItem("user")
     return userString ? JSON.parse(userString) : null
   });
-
-  useEffect(() => {
-    if (!logedInUser?._id) return;
-    fetch(`http://localhost:8000/product/${logedInUser?._id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Not able to fetch product");
-        return res.json();
-      })
-      .then((data) => {
-        setUserProduct(data.userProduct);
-      })
-      .catch((err) => console.error("Error fetching:", err));
-  }, []);
 
   async function addProduct() {
     if (!img) {
@@ -41,7 +26,6 @@ const SellPage = () => {
         body: formData,
       })
       const imageUpload = await response.json();
-      console.log(imageUpload.secure_url);
       let res = await fetch("http://localhost:8000/product/add", {
         method: "POST",
         headers: {
@@ -67,35 +51,27 @@ const SellPage = () => {
     addProduct();
   }
 
-
   return (
-    <div className=' flex items-center justify-center h-screen w-full pt-34'>
+    <div className=' flex items-center justify-center h-screen w-full'>
       {
         logedInUser ? (
           <>
-            <div className=' w-1/2'>
-              {
-                userProduct?.map((product) => (
-                  <ProductCard key={product._id} product={product} />
-                ))
-              }
-            </div>
-            <div className='w-1/2 flex items-center justify-center '>
-              <div className='w-[45%] max-w-md'>
+            <div className='flex items-center justify-center lg:pt-6 w-full'>
+              <div className='lg:max-w-md w-full mx-4'>
                 <form
                   onSubmit={(e) => handleSubmit(e)}
-                  className='bg-[#ffd5c3] px-8 py-14 rounded-3xl shadow-md'
+                  className='bg-primary-dark border border-white/10 px-8 py-14 rounded-3xl shadow-md text-white'
                 >
-                  <h1 className='font-semibold text-center text-2xl mb-4 tracking-tighter font-poppins'>Add an item to sell</h1>
+                  <h1 className='font-semibold text-center text-2xl mb-4 tracking-tighter font-poppins text-textcolor-primary'>Add an item</h1>
                   <input
-                    className='block w-full px-2 py-2 outline-none rounded-md mb-2 bg-[#FFF1EB]'
+                    className='block w-full px-2 py-2 outline-none rounded-md mb-2 bg-primary-light'
                     type="text"
                     placeholder='Your product'
                     name='productname'
                     onChange={(e) => setProductname(e.target.value)}
                   />
                   <textarea
-                    className='resize-none block w-full px-2 py-2 outline-none rounded-md mb-2 bg-[#FFF1EB]'
+                    className='resize-none block w-full px-2 py-2 outline-none rounded-md mb-2 bg-primary-light'
                     type="text"
                     placeholder='Your description'
                     name='productdesc'
@@ -103,21 +79,21 @@ const SellPage = () => {
                   >
                   </textarea>
                   <input
-                    className='block w-full px-2 py-2 outline-none rounded-md mb-4 bg-[#FFF1EB]'
+                    className='block w-full px-2 py-2 outline-none rounded-md mb-2 bg-primary-light'
                     type="text"
                     placeholder='Price'
                     name='productprice'
                     onChange={(e) => setProductprice(e.target.value)}
                   />
                   <input
-                    className='block w-full px-2 py-2 outline-none rounded-md mb-4 bg-[#FFF1EB]'
+                    className='block w-full px-2 py-2 outline-none rounded-md mb-4 bg-primary-light text-textcolor-secondary file:bg-primary-light file:rounded-md file:border-none file:cursor-pointer file:text-textcolor-secondary hover:file:bg-primary-dark cursor-pointer'
                     type="file"
                     name='productImage'
                     onChange={(e) => setImg(e.target.files[0])}
                   />
                   <button
                     type='submit'
-                    className='font-poppins  tracking-tighter w-full bg-green-700 text-white items-center mb-2 px-2 py-2 rounded-md font-semibold'
+                    className='font-poppins  tracking-tighter w-full bg-black text-white items-center mb-2 px-2 py-2 rounded-md font-semibold hover:text-accent-dark duration-200'
                   >
                     Add Item
                   </button>
@@ -127,9 +103,14 @@ const SellPage = () => {
           </>
         ) : (
           <>
-            <div className='bg-[#ffd5c3] p-10 rounded-3xl font-poppins flex items-center flex-col'>
-              <h1 className='text-xl font-semibold mb-4'>You must be logged in to sell a product</h1>
-              <Link to={"/login"} className='bg-black text-white px-8 py-2 rounded-full'>Login</Link>
+            <div className='bg-primary-dark border border-white/10 p-10 rounded-3xl font-poppins flex items-center flex-col mx-4'>
+              <h1 className='text-xl font-semibold mb-4 text-textcolor-secondary'>You must be logged in to sell a product</h1>
+              <Link
+                to={"/login"}
+                className='bg-black hover:text-accent-dark duration-150 hover:scale-105 text-white px-8 py-2 rounded-full'
+              >
+                Login
+              </Link>
             </div>
           </>
         )

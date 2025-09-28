@@ -58,4 +58,17 @@ router.get("/:id", async (req, res) => {
     }
 })
 
+router.get("/details/:id", async (req, res) => {
+    const productId = req.params.id;
+    try {
+        const product = await productModel.findOne({ _id: productId });
+        if (!product) {
+            return res.status(500).json({ message: "No product added", success: false });
+        }
+        return res.status(200).json({ message: "Product found", success: true, product: product });
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 module.exports = router;
